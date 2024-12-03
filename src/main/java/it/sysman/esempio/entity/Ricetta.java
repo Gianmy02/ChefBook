@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Ricetta {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String nome;
