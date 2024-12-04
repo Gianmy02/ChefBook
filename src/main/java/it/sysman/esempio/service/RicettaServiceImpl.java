@@ -1,6 +1,8 @@
 package it.sysman.esempio.service;
 
+import it.sysman.esempio.dto.RicettaDto;
 import it.sysman.esempio.entity.Ricetta;
+import it.sysman.esempio.utils.RicettaMapper;
 import it.sysman.esempio.repository.RicettaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,12 @@ public class RicettaServiceImpl implements RicettaService{
     @Autowired
     private RicettaRepository ricettaRepository;
 
+    @Autowired
+    private RicettaMapper ricettaMapper;
+
     @PostMapping
-    public void addRicetta(@RequestBody Ricetta r){
+    public void addRicetta(@RequestBody RicettaDto dto){
+        Ricetta r = ricettaMapper.ricettaDtoToRicetta(dto);
         ricettaRepository.save(r);
     }
 
@@ -25,18 +31,19 @@ public class RicettaServiceImpl implements RicettaService{
     }
 
     @PutMapping
-    public void editRicetta(@RequestBody Ricetta r){
+    public void editRicetta(@RequestBody RicettaDto dto){
+        Ricetta r = ricettaMapper.ricettaDtoToRicetta(dto);
         ricettaRepository.save(r);
     }
 
     @GetMapping
-    public Ricetta getRicettaByName(@RequestParam String nome){
-        return ricettaRepository.findByNome(nome);
+    public RicettaDto getRicettaByName(@RequestParam String nome){
+       return ricettaMapper.ricettaToRicettaDto(ricettaRepository.findByNome(nome));
     }
 
     @GetMapping("all")
-    public List<Ricetta> getAllRicette(){
-        return ricettaRepository.findAll();
+    public List<RicettaDto> getAllRicette(){
+        return ricettaMapper.ricetteToRicetteDto(ricettaRepository.findAll());
 
     }
 }
