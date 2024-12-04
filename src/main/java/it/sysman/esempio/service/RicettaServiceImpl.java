@@ -1,42 +1,42 @@
-package it.sysman.esempio.rest;
+package it.sysman.esempio.service;
 
 import it.sysman.esempio.entity.Ricetta;
-import it.sysman.esempio.service.RicettaService;
+import it.sysman.esempio.repository.RicettaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("ricette")
-public class RicettaController {
+@Service
+public class RicettaServiceImpl implements RicettaService{
 
     @Autowired
-    private RicettaService ricettaService;
+    private RicettaRepository ricettaRepository;
 
     @PostMapping
     public void addRicetta(@RequestBody Ricetta r){
-        ricettaService.addRicetta(r);
+        ricettaRepository.save(r);
     }
 
     @DeleteMapping("{id}")
     public void removeRicetta(@PathVariable int id){
-        ricettaService.removeRicetta(id);
+        ricettaRepository.deleteById(id);
     }
 
     @PutMapping
     public void editRicetta(@RequestBody Ricetta r){
-        ricettaService.editRicetta(r);
+        ricettaRepository.save(r);
     }
 
     @GetMapping
     public Ricetta getRicettaByName(@RequestParam String nome){
-        return ricettaService.getRicettaByName(nome);
+        return ricettaRepository.findByNome(nome);
     }
 
     @GetMapping("all")
     public List<Ricetta> getAllRicette(){
-        return ricettaService.getAllRicette();
+        return ricettaRepository.findAll();
 
     }
 }
