@@ -1,8 +1,8 @@
-package it.sysman.esempio.rest;
+package it.sysman.chefbook.rest;
 
 
-import it.sysman.esempio.dto.RicettaDto;
-import it.sysman.esempio.service.RicettaService;
+import it.sysman.chefbook.dto.RicettaDto;
+import it.sysman.chefbook.service.RicettaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

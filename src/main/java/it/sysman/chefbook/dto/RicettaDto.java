@@ -1,4 +1,4 @@
-package it.sysman.esempio.dto;
+package it.sysman.chefbook.dto;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
-package it.sysman.esempio.repository;
+package it.sysman.chefbook.repository;
 
-import it.sysman.esempio.entity.Ricetta;
+import it.sysman.chefbook.entity.Ricetta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package it.sysman.esempio.utils;
+package it.sysman.chefbook.utils;
 
-import it.sysman.esempio.dto.AutoreDto;
-import it.sysman.esempio.entity.Autore;
+import it.sysman.chefbook.dto.AutoreDto;
+import it.sysman.chefbook.entity.Autore;
 import org.mapstruct.Mapper;
 
 import java.util.List;

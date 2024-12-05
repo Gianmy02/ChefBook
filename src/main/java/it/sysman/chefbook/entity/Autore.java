@@ -1,4 +1,4 @@
-package it.sysman.esempio.entity;
+package it.sysman.chefbook.entity;
 
 
 import jakarta.persistence.*;

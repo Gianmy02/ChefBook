@@ -1,9 +1,9 @@
-package it.sysman.esempio.config;
+package it.sysman.chefbook.config;
 
-import it.sysman.esempio.utils.AutoreMapper;
-import it.sysman.esempio.utils.AutoreMapperImpl;
-import it.sysman.esempio.utils.RicettaMapper;
-import it.sysman.esempio.utils.RicettaMapperImpl;
+import it.sysman.chefbook.utils.AutoreMapper;
+import it.sysman.chefbook.utils.AutoreMapperImpl;
+import it.sysman.chefbook.utils.RicettaMapper;
+import it.sysman.chefbook.utils.RicettaMapperImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

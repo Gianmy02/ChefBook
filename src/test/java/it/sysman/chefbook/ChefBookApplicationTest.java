@@ -1,10 +1,10 @@
-package it.sysman.esempio;
+package it.sysman.chefbook;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EsempioApplicationTests {
+class ChefBookApplicationTests {
 
 	@Test
 	void contextLoads() {

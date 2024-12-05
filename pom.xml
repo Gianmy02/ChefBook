@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>it.sysman</groupId>
-	<artifactId>esempio</artifactId>
+	<artifactId>chefbook</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>esempio</name>
+	<name>chefbook</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

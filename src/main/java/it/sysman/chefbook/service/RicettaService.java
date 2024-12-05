@@ -1,7 +1,7 @@
-package it.sysman.esempio.service;
+package it.sysman.chefbook.service;
 
 
-import it.sysman.esempio.dto.RicettaDto;
+import it.sysman.chefbook.dto.RicettaDto;
 
 
 import java.util.List;

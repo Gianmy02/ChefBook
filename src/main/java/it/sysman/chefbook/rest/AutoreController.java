@@ -1,8 +1,8 @@
-package it.sysman.esempio.rest;
+package it.sysman.chefbook.rest;
 
 
-import it.sysman.esempio.dto.AutoreDto;
-import it.sysman.esempio.service.AutoreService;
+import it.sysman.chefbook.dto.AutoreDto;
+import it.sysman.chefbook.service.AutoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,9 +1,9 @@
-package it.sysman.esempio.service;
+package it.sysman.chefbook.service;
 
-import it.sysman.esempio.dto.AutoreDto;
-import it.sysman.esempio.entity.Autore;
-import it.sysman.esempio.repository.AutoreRepository;
-import it.sysman.esempio.utils.AutoreMapper;
+import it.sysman.chefbook.dto.AutoreDto;
+import it.sysman.chefbook.entity.Autore;
+import it.sysman.chefbook.repository.AutoreRepository;
+import it.sysman.chefbook.utils.AutoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;

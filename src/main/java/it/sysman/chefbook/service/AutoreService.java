@@ -1,6 +1,6 @@
-package it.sysman.esempio.service;
+package it.sysman.chefbook.service;
 
-import it.sysman.esempio.dto.AutoreDto;
+import it.sysman.chefbook.dto.AutoreDto;
 
 import java.util.List;
 

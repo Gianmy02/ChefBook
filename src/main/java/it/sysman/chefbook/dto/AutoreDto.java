@@ -1,6 +1,6 @@
-package it.sysman.esempio.dto;
+package it.sysman.chefbook.dto;
 
-import it.sysman.esempio.entity.Ricetta;
+import it.sysman.chefbook.entity.Ricetta;
 import lombok.Data;
 
 import java.util.List;

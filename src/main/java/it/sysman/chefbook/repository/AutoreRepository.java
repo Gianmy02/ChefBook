@@ -1,6 +1,6 @@
-package it.sysman.esempio.repository;
+package it.sysman.chefbook.repository;
 
-import it.sysman.esempio.entity.Autore;
+import it.sysman.chefbook.entity.Autore;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,9 +1,9 @@
-package it.sysman.esempio.service;
+package it.sysman.chefbook.service;
 
-import it.sysman.esempio.dto.RicettaDto;
-import it.sysman.esempio.entity.Ricetta;
-import it.sysman.esempio.utils.RicettaMapper;
-import it.sysman.esempio.repository.RicettaRepository;
+import it.sysman.chefbook.dto.RicettaDto;
+import it.sysman.chefbook.entity.Ricetta;
+import it.sysman.chefbook.utils.RicettaMapper;
+import it.sysman.chefbook.repository.RicettaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;

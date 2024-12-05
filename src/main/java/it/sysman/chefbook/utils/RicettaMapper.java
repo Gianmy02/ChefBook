@@ -1,7 +1,7 @@
-package it.sysman.esempio.utils;
+package it.sysman.chefbook.utils;
 
-import it.sysman.esempio.dto.RicettaDto;
-import it.sysman.esempio.entity.Ricetta;
+import it.sysman.chefbook.dto.RicettaDto;
+import it.sysman.chefbook.entity.Ricetta;
 import org.mapstruct.Mapper;
 
 import java.util.List;
