@@ -3,7 +3,6 @@ package it.sysman.esempio.utils;
 import it.sysman.esempio.dto.RicettaDto;
 import it.sysman.esempio.entity.Ricetta;
 import org.mapstruct.Mapper;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
