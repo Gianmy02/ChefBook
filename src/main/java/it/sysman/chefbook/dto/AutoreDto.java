@@ -1,14 +1,16 @@
 package it.sysman.chefbook.dto;
 
-import it.sysman.chefbook.entity.Ricetta;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AutoreDto {
+    private int id;
     private String nome;
     private String cognome;
     private String sesso;
-    private List<Ricetta> ricette;
+    private String email;
 }

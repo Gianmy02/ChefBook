@@ -6,8 +6,9 @@ import java.util.List;
 
 public interface AutoreService {
     void addAutore(AutoreDto dto);
-    void editAutore(AutoreDto dto);
-    void removeAutore(int id);
+    boolean editAutore(AutoreDto dto);
+    boolean removeAutore(int id);
     AutoreDto getAutoreByName(String nome);
+    AutoreDto getAutoreByEmail(String email);
     List<AutoreDto> getAllAutori();
 }

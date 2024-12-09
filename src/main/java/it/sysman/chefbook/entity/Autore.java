@@ -19,6 +19,7 @@ public class Autore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String email;
     private String nome;
     private String cognome;
     private String sesso;
