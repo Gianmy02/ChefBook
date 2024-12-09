@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RicettaService {
     void addRicetta(RicettaDto r);
-    void editRicetta(RicettaDto r);
+    boolean editRicetta(RicettaDto r);
     boolean removeRicetta(int id);
     RicettaDto getRicettaByName(String nome);
     List<RicettaDto> getAllRicette();

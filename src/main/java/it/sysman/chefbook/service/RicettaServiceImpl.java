@@ -1,6 +1,7 @@
 package it.sysman.chefbook.service;
 
 import it.sysman.chefbook.dto.RicettaDto;
+import it.sysman.chefbook.entity.Autore;
 import it.sysman.chefbook.entity.Ricetta;
 import it.sysman.chefbook.exception.RicettaNotFoundException;
 import it.sysman.chefbook.utils.RicettaMapper;
@@ -29,17 +30,13 @@ public class RicettaServiceImpl implements RicettaService{
 
 
     public boolean removeRicetta(@PathVariable int id){
-        if(ricettaRepository.existsById(id)){
-            return invokePostControl("deleteById",id);
-        }else
-            return false;
-
+        return invokePostControl("deleteById",id, null);
     }
 
 
-    public void editRicetta(@RequestBody RicettaDto dto){
+    public boolean editRicetta(@RequestBody RicettaDto dto){
         Ricetta r = ricettaMapper.ricettaDtoToRicetta(dto);
-        ricettaRepository.save(r);
+        return invokePostControl("save", r.getId(), r);
     }
 
 
@@ -55,7 +52,7 @@ public class RicettaServiceImpl implements RicettaService{
         return ricettaMapper.ricetteToRicetteDto(ricettaRepository.findAll());
     }
 
-    private boolean invokePostControl(String method, int id){
+    private boolean invokePostControl(String method, int id, Ricetta ricetta){
         if(!ricettaRepository.existsById(id))
             return false;
         else {
@@ -73,14 +70,15 @@ public class RicettaServiceImpl implements RicettaService{
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            } else if(method.contains("edit")) {
+            } else if(method.contains("save")) {
                 try {
                     Method[] methods = this.ricettaRepository.getClass()
                             .getDeclaredMethods();
 
                     for (Method m: methods){
                         if(m.getName().contains(method)) {
-                            m.invoke(ricettaRepository, id);
+                            m.invoke(ricettaRepository, ricetta);  //fiduciosi che sia la prima funzione (save) che si trova
+                            break;
                         }
                     }
                     return true;

@@ -84,7 +84,7 @@ public class AutoreServiceImpl implements AutoreService{
 
                     for (Method m: methods){
                         if(m.getName().contains(method)) {
-                            m.invoke(autoreRepository, autore);  //fiduciosi che sia la prima che si trova
+                            m.invoke(autoreRepository, autore);  //fiduciosi che sia la prima funzione (save) che si trova
                             break;
                         }
                     }
