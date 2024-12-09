@@ -52,42 +52,39 @@ public class RicettaServiceImpl implements RicettaService{
         return ricettaMapper.ricetteToRicetteDto(ricettaRepository.findAll());
     }
 
+    //programmazione riflessiva
     private boolean invokePostControl(String method, int id, Ricetta ricetta){
-        if(!ricettaRepository.existsById(id))
-            return false;
-        else {
-            if(method.contains("delete")) {
-                try {
-                    Method[] methods = this.ricettaRepository.getClass()
-                            .getDeclaredMethods();
+        if(method.contains("delete") && ricettaRepository.existsById(id)) {
+            try {
+                Method[] methods = this.ricettaRepository.getClass()
+                        .getDeclaredMethods();
 
-                    for (Method m: methods){
-                        if(m.getName().contains(method)) {
-                            m.invoke(ricettaRepository, id);
-                        }
+                for (Method m: methods){
+                    if(m.getName().contains(method)) {
+                        m.invoke(ricettaRepository, id);
                     }
-                    return true;
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
                 }
-            } else if(method.contains("save")) {
-                try {
-                    Method[] methods = this.ricettaRepository.getClass()
-                            .getDeclaredMethods();
-
-                    for (Method m: methods){
-                        if(m.getName().contains(method)) {
-                            m.invoke(ricettaRepository, ricetta);  //fiduciosi che sia la prima funzione (save) che si trova
-                            break;
-                        }
-                    }
-                    return true;
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                return true;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            return false;
+        } else if(method.contains("save")) {
+            try {
+                Method[] methods = this.ricettaRepository.getClass()
+                        .getDeclaredMethods();
+
+                for (Method m: methods){
+                    if(m.getName().contains(method)) {
+                        m.invoke(ricettaRepository, ricetta);  //fiduciosi che sia la prima funzione (save) che si trova
+                        break;
+                    }
+                }
+                return true;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
+        return false;
     }
 
 }
