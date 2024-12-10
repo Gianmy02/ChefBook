@@ -59,37 +59,41 @@ public class AutoreServiceImpl implements AutoreService{
         return autoreMapper.autoriToAutoriDto(autoreRepository.findAll());
     }
 
-    private boolean invokePostControl(String method, int id, Autore autore){
-        if(method.contains("delete") && autoreRepository.existsById(id)) {
-            try {
-                Method[] methods = this.autoreRepository.getClass()
-                        .getDeclaredMethods();
+    private boolean invokePostControl(String method, int id, Autore autore) {
+        if (!autoreRepository.existsById(id))
+            return false;
+        else {
+            if (method.contains("delete")) {
+                try {
+                    Method[] methods = this.autoreRepository.getClass()
+                            .getDeclaredMethods();
 
-                for (Method m: methods){
-                    if(m.getName().contains(method)) {
-                        m.invoke(autoreRepository, id);
+                    for (Method m : methods) {
+                        if (m.getName().contains(method)) {
+                            m.invoke(autoreRepository, id);
+                        }
                     }
+                    return true;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-                return true;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        } else if(method.contains("save")) {
-            try {
-                Method[] methods = this.autoreRepository.getClass()
-                        .getDeclaredMethods();
+            } else if (method.contains("save")) {
+                try {
+                    Method[] methods = this.autoreRepository.getClass()
+                            .getDeclaredMethods();
 
-                for (Method m: methods){
-                    if(m.getName().contains(method)) {
-                        m.invoke(autoreRepository, autore);  //fiduciosi che sia la prima funzione (save) che si trova
-                        break;
+                    for (Method m : methods) {
+                        if (m.getName().contains(method)) {
+                            m.invoke(autoreRepository, autore);  //fiduciosi che sia la prima funzione (save) che si trova
+                            break;
+                        }
                     }
+                    return true;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-                return true;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
+            return false;
         }
-        return false;
     }
 }

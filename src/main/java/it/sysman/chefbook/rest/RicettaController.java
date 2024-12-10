@@ -25,14 +25,16 @@ public class RicettaController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> removeRicetta(@PathVariable int id){
-        return  ricettaService.removeRicetta(id) ?
+        return ricettaService.removeRicetta(id) ?
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @PutMapping
-    public void editRicetta(@RequestBody RicettaDto r){
-        ricettaService.editRicetta(r);
+    public ResponseEntity<Void> editRicetta(@RequestBody RicettaDto dto){
+        return ricettaService.editRicetta(dto) ?
+                ResponseEntity.status(HttpStatus.OK).body(null) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @GetMapping("nome")

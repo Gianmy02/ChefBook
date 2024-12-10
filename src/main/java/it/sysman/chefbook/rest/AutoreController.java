@@ -28,15 +28,16 @@ public class AutoreController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> removeAutore(@PathVariable int id){
-            return autoreService.removeAutore(id) ?
-                    ResponseEntity.status(HttpStatus.OK).body(null) :
-                    ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return autoreService.removeAutore(id) ?
+                ResponseEntity.status(HttpStatus.OK).body(null) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @PutMapping
     public ResponseEntity<Void> editAutore(@RequestBody AutoreDto dto){
-        autoreService.editAutore(dto);
-        return null;
+        return autoreService.editAutore(dto) ?
+                ResponseEntity.status(HttpStatus.OK).body(null) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @GetMapping("nome")
