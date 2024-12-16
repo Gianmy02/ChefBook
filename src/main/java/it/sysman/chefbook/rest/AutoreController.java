@@ -22,7 +22,6 @@ public class AutoreController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public void addAutore(@RequestBody AutoreDto dto){
-        log.info("Autore aggiunto");
         autoreService.addAutore(dto);
     }
 

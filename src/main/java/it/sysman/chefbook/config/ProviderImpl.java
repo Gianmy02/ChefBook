@@ -30,6 +30,6 @@ public class ProviderImpl implements AuthenticationProvider {
     }
 
     public boolean supports(Class<?> authentication) {
-        return false;
+        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
 }

@@ -3,12 +3,17 @@ package it.sysman.chefbook.service;
 import it.sysman.chefbook.dto.RicettaDto;
 import it.sysman.chefbook.entity.Autore;
 import it.sysman.chefbook.entity.Ricetta;
+import it.sysman.chefbook.exception.AutoreNotFoundException;
 import it.sysman.chefbook.exception.RicettaNotFoundException;
-import it.sysman.chefbook.utils.RicettaMapper;
+import it.sysman.chefbook.repository.AutoreRepository;
 import it.sysman.chefbook.repository.RicettaRepository;
+import it.sysman.chefbook.utils.RicettaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -22,9 +27,16 @@ public class RicettaServiceImpl implements RicettaService{
     @Autowired
     private RicettaMapper ricettaMapper;
 
+    @Autowired
+    private AutoreRepository autoreRepository;
 
     public void addRicetta(@RequestBody RicettaDto dto){
         Ricetta r = ricettaMapper.ricettaDtoToRicetta(dto);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Autore autore = autoreRepository.findByEmail(email);
+        if(autore == null)
+            throw new AutoreNotFoundException("Autore: "+email);
+        r.setAutore(autore);
         ricettaRepository.save(r);
     }
 

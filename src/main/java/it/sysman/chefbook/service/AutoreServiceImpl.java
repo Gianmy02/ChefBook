@@ -2,8 +2,10 @@ package it.sysman.chefbook.service;
 
 import it.sysman.chefbook.dto.AutoreDto;
 import it.sysman.chefbook.entity.Autore;
+import it.sysman.chefbook.entity.User;
 import it.sysman.chefbook.exception.AutoreNotFoundException;
 import it.sysman.chefbook.repository.AutoreRepository;
+import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.utils.AutoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,14 @@ public class AutoreServiceImpl implements AutoreService{
     @Autowired
     private AutoreMapper autoreMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public void addAutore(@RequestBody AutoreDto dto) {
         Autore a = autoreMapper.autoreDtoToAutore(dto);
+        User user = autoreMapper.autoreDtoToUser(dto);
         autoreRepository.save(a);
+        userRepository.save(user);
     }
 
     public boolean removeAutore(@PathVariable int id) {

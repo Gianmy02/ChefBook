@@ -13,4 +13,5 @@ public class AutoreDto {
     private String cognome;
     private String sesso;
     private String email;
+    private String password;
 }
