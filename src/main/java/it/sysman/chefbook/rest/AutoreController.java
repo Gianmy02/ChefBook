@@ -3,10 +3,12 @@ package it.sysman.chefbook.rest;
 
 import it.sysman.chefbook.dto.AutoreDto;
 import it.sysman.chefbook.service.AutoreService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class AutoreController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void addAutore(@RequestBody AutoreDto dto){
+    public void addAutore(@RequestBody @Valid AutoreDto dto){
         autoreService.addAutore(dto);
     }
 
