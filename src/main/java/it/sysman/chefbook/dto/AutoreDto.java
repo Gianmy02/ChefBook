@@ -1,6 +1,5 @@
 package it.sysman.chefbook.dto;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -5,6 +5,7 @@ import it.sysman.chefbook.entity.Autore;
 import it.sysman.chefbook.entity.User;
 import it.sysman.chefbook.exception.AutoreNotFoundException;
 import it.sysman.chefbook.repository.AutoreRepository;
+import it.sysman.chefbook.repository.RoleRepository;
 import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.utils.AutoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,13 @@ public class AutoreServiceImpl implements AutoreService{
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleService roleService;
+
     public void addAutore(@RequestBody AutoreDto dto) {
         Autore a = autoreMapper.autoreDtoToAutore(dto);
         User user = autoreMapper.autoreDtoToUser(dto);
+        user.setRole(roleService.findByValue("ROLE_CLIENT"));
         autoreRepository.save(a);
         userRepository.save(user);
     }
