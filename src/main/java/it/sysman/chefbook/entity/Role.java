@@ -16,6 +16,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String value;
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", orphanRemoval = true)
     List<User> users;
 }

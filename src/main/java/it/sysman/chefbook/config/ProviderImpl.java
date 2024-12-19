@@ -26,7 +26,7 @@ public class ProviderImpl implements AuthenticationProvider {
         UserDetails user = userService.loadUserByUsername(username);
         if(!passwordEncoder.matches(password, user.getPassword()))
             throw new BadCredentialsException("User not found");
-        return new UsernamePasswordAuthenticationToken(username, password, authentication.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
     }
 
     public boolean supports(Class<?> authentication) {

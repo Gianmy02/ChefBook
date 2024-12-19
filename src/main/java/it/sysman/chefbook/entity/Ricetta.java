@@ -20,7 +20,7 @@ public class Ricetta {
     private String nome;
     private String descrizione;
     private boolean privacy;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "autore")
     private Autore autore;
 

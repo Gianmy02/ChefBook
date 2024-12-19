@@ -9,6 +9,7 @@ import it.sysman.chefbook.repository.RoleRepository;
 import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.utils.AutoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,10 +33,14 @@ public class AutoreServiceImpl implements AutoreService{
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void addAutore(@RequestBody AutoreDto dto) {
         Autore a = autoreMapper.autoreDtoToAutore(dto);
         User user = autoreMapper.autoreDtoToUser(dto);
         user.setRole(roleService.findByValue("ROLE_CLIENT"));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         autoreRepository.save(a);
         userRepository.save(user);
     }

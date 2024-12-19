@@ -24,6 +24,6 @@ public class Autore {
     private String nome;
     private String cognome;
     private String sesso;
-    @OneToMany(mappedBy = "autore")
+    @OneToMany(mappedBy = "autore", orphanRemoval = true)
     private List<Ricetta> ricette;
 }
