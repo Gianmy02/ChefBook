@@ -20,7 +20,7 @@ public class AutoreController {
     @Autowired
     private AutoreService autoreService;
 
-    @PostMapping
+    @PostMapping("signup")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void addAutore(@RequestBody @Valid AutoreDto dto){
         autoreService.addAutore(dto);
