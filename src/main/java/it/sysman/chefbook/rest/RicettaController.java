@@ -1,6 +1,7 @@
 package it.sysman.chefbook.rest;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.sysman.chefbook.dto.RicettaDto;
 import it.sysman.chefbook.service.RicettaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name = "bearer-auth")
 @RequestMapping("ricette")
 public class RicettaController {
 
