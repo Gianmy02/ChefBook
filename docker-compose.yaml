@@ -1,0 +1,37 @@
+name: cb_suite
+services:
+  chefbook:
+    container_name: cb
+    build: .
+    image: chefbook:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    volumes:
+      - /mnt/c/Users/amministratore/Desktop/logs:/app/logs
+    networks:
+      - test_chefbook
+
+  db:
+    container_name: mysqldb
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: chefbook
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: Gianmarco02
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - test_chefbook
+
+volumes:
+  db_data:
+    name: dbdata
+
+networks:
+  test_chefbook:
+    name: test_chefbook
