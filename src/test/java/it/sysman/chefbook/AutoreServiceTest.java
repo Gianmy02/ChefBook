@@ -2,6 +2,8 @@ package it.sysman.chefbook;
 
 import it.sysman.chefbook.dto.AutoreDto;
 import it.sysman.chefbook.entity.Autore;
+import it.sysman.chefbook.entity.Role;
+import it.sysman.chefbook.entity.User;
 import it.sysman.chefbook.exception.AutoreNotFoundException;
 import it.sysman.chefbook.repository.AutoreRepository;
 import it.sysman.chefbook.repository.UserRepository;
@@ -134,6 +136,33 @@ public class AutoreServiceTest {
             assertEquals(autoreDto1, result.get(0));
             assertEquals(autoreDto2, result.get(1));
         }
+
+        @Test
+        public void addAutoreTest() {
+            AutoreDto dto = AutoreDto.builder().password("password").build();
+            Autore autore = Autore.builder().build();
+            User user = User.builder().password("password").build();
+            Role role = Role.builder().value("ROLE_CLIENT").build();
+
+            when(autoreMapper.autoreDtoToAutore(dto)).thenReturn(autore);
+            when(autoreMapper.autoreDtoToUser(dto)).thenReturn(user);
+            when(roleService.findByValue("ROLE_CLIENT")).thenReturn(role);
+            when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
+
+            autoreService.addAutore(dto);
+
+            verify(autoreMapper).autoreDtoToAutore(dto);
+            verify(autoreMapper).autoreDtoToUser(dto);
+            verify(roleService).findByValue("ROLE_CLIENT");
+            verify(passwordEncoder).encode("password");
+            verify(autoreRepository).save(autore);
+            verify(userRepository).save(user);
+
+            assertEquals("encodedPassword", user.getPassword());
+            assertEquals(role, user.getRole());
+        }
+
+
     }
 
 }
