@@ -5,7 +5,6 @@ import it.sysman.chefbook.entity.Autore;
 import it.sysman.chefbook.entity.User;
 import it.sysman.chefbook.exception.AutoreNotFoundException;
 import it.sysman.chefbook.repository.AutoreRepository;
-import it.sysman.chefbook.repository.RoleRepository;
 import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.utils.AutoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
