@@ -1,6 +1,5 @@
 package it.sysman.chefbook;
 
-import io.jsonwebtoken.lang.Assert;
 import it.sysman.chefbook.dto.RicettaDto;
 import it.sysman.chefbook.entity.Autore;
 import it.sysman.chefbook.entity.Ricetta;
@@ -23,8 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,6 +77,19 @@ public class RicettaServiceTest {
             verify(autoreRepository).findByEmail(email);
 
             assertEquals("Autore: " + email, exception.getMessage());
+        }
+
+        @Test
+        public void editAndRemoveFailTest(){
+            RicettaDto dto = RicettaDto.builder().id(1).build();
+            Ricetta ricetta = Ricetta.builder().id(1).build();
+
+            when(ricettaMapper.ricettaDtoToRicetta(dto)).thenReturn(ricetta);
+            when(ricettaRepository.existsById(1)).thenReturn(false);
+            boolean result = ricettaService.editRicetta(dto);
+
+            assertFalse(result);
+            verify(ricettaMapper).ricettaDtoToRicetta(dto);
         }
     }
 
@@ -148,6 +159,31 @@ public class RicettaServiceTest {
             assertEquals(2, result.size());
             assertEquals(ricettaDto1, result.get(0));
             assertEquals(ricettaDto2, result.get(1));
+        }
+
+        @Test
+        public void editRicettaTest(){
+            RicettaDto dto = RicettaDto.builder().id(1).build();
+            Ricetta ricetta = Ricetta.builder().id(1).build();
+
+            when(ricettaMapper.ricettaDtoToRicetta(dto)).thenReturn(ricetta);
+            when(ricettaRepository.existsById(1)).thenReturn(true);
+            when(ricettaRepository.save(ricetta)).thenReturn(ricetta);
+            boolean result = ricettaService.editRicetta(dto);
+
+            assertTrue(result);
+            verify(ricettaMapper).ricettaDtoToRicetta(dto);
+        }
+
+        @Test
+        public void removeRicettaTest(){
+            Ricetta ricetta = Ricetta.builder().id(1).build();
+
+            when(ricettaRepository.existsById(1)).thenReturn(true);
+            doNothing().when(ricettaRepository).deleteById(ricetta.getId());
+            boolean result = ricettaService.removeRicetta(ricetta.getId());
+
+            assertTrue(result);
         }
     }
 }

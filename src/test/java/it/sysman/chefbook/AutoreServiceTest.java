@@ -21,10 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AutoreServiceTest {
@@ -75,6 +73,19 @@ public class AutoreServiceTest {
             verify(autoreRepository).findByEmail(email);
 
             assertEquals("Autore non trovato", exception.getMessage());
+        }
+
+        @Test
+        public void editAndRemoveFailTest(){
+            AutoreDto dto = AutoreDto.builder().id(1).build();
+            Autore autore = Autore.builder().id(1).build();
+
+            when(autoreMapper.autoreDtoToAutore(dto)).thenReturn(autore);
+            when(autoreRepository.existsById(1)).thenReturn(false);
+            boolean result = autoreService.editAutore(dto);
+
+            assertFalse(result);
+            verify(autoreMapper).autoreDtoToAutore(dto);
         }
     }
 
@@ -162,7 +173,28 @@ public class AutoreServiceTest {
             assertEquals(role, user.getRole());
         }
 
+        @Test
+        public void editAutoreTest() {
+            AutoreDto dto = AutoreDto.builder().id(1).build();
+            Autore autore = Autore.builder().id(1).build();
 
+            when(autoreMapper.autoreDtoToAutore(dto)).thenReturn(autore);
+            when(autoreRepository.existsById(1)).thenReturn(true);
+            when(autoreRepository.save(autore)).thenReturn(autore);
+            boolean result = autoreService.editAutore(dto);
+
+            assertTrue(result);
+            verify(autoreMapper).autoreDtoToAutore(dto);
+        }
+
+        @Test
+        public void removeAutoreTest() {
+            Autore autore = Autore.builder().id(1).build();
+            when(autoreRepository.existsById(1)).thenReturn(true);
+            doNothing().when(autoreRepository).deleteById(autore.getId());
+            boolean result = autoreService.removeAutore(autore.getId());
+
+            assertTrue(result);
+        }
     }
-
 }
