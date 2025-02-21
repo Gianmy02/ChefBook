@@ -10,9 +10,6 @@ import it.sysman.chefbook.utils.AutoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -35,7 +32,7 @@ public class AutoreServiceImpl implements AutoreService{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void addAutore(@RequestBody AutoreDto dto) {
+    public void addAutore(AutoreDto dto) {
         Autore a = autoreMapper.autoreDtoToAutore(dto);
         User user = autoreMapper.autoreDtoToUser(dto);
         user.setRole(roleService.findByValue("ROLE_CLIENT"));
@@ -44,17 +41,17 @@ public class AutoreServiceImpl implements AutoreService{
         userRepository.save(user);
     }
 
-    public boolean removeAutore(@PathVariable int id) {
+    public boolean removeAutore(int id) {
         return invokePostControl("deleteById",id, null);
     }
 
-    public boolean editAutore(@RequestBody AutoreDto dto) {
+    public boolean editAutore(AutoreDto dto) {
         Autore a = autoreMapper.autoreDtoToAutore(dto);
         return invokePostControl("save",a.getId(), a);
     }
 
 
-    public AutoreDto getAutoreByName(@RequestParam String nome) {
+    public AutoreDto getAutoreByName(String nome) {
         Autore a = autoreRepository.findByNome(nome);
         if(a == null)
             throw new AutoreNotFoundException("Autore non trovato");

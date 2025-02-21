@@ -1,6 +1,6 @@
 package it.sysman.chefbook.rest;
 
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.sysman.chefbook.dto.AutoreDto;
 import it.sysman.chefbook.service.AutoreService;
 import jakarta.validation.Valid;
@@ -14,6 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@SecurityRequirement(name = "bearer-auth")
 @RequestMapping("autori")
 public class AutoreController {
 

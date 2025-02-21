@@ -11,9 +11,6 @@ import it.sysman.chefbook.utils.RicettaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -30,7 +27,7 @@ public class RicettaServiceImpl implements RicettaService{
     @Autowired
     private AutoreRepository autoreRepository;
 
-    public void addRicetta(@RequestBody RicettaDto dto){
+    public void addRicetta(RicettaDto dto){
         Ricetta r = ricettaMapper.ricettaDtoToRicetta(dto);
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Autore autore = autoreRepository.findByEmail(email);
@@ -41,18 +38,18 @@ public class RicettaServiceImpl implements RicettaService{
     }
 
 
-    public boolean removeRicetta(@PathVariable int id){
+    public boolean removeRicetta(int id){
         return invokePostControl("deleteById",id, null);
     }
 
 
-    public boolean editRicetta(@RequestBody RicettaDto dto){
+    public boolean editRicetta(RicettaDto dto){
         Ricetta r = ricettaMapper.ricettaDtoToRicetta(dto);
         return invokePostControl("save", r.getId(), r);
     }
 
 
-    public RicettaDto getRicettaByName(@RequestParam String nome){
+    public RicettaDto getRicettaByName(String nome){
         Ricetta r = ricettaRepository.findByNome(nome);
         if(r == null)
             throw new RicettaNotFoundException("Ricetta not found");
