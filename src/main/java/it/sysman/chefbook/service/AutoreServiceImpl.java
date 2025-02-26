@@ -7,6 +7,7 @@ import it.sysman.chefbook.exception.AutoreNotFoundException;
 import it.sysman.chefbook.repository.AutoreRepository;
 import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.utils.AutoreMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 @Service
+@Transactional
 public class AutoreServiceImpl implements AutoreService{
 
     @Autowired

@@ -14,6 +14,7 @@ import it.sysman.chefbook.repository.TransferRequestRepository;
 import it.sysman.chefbook.utils.RicettaMapper;
 import it.sysman.chefbook.utils.TransferRequestStatusEnum;
 import it.sysman.chefbook.utils.TransferTokenGenerator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 @Service
+@Transactional
 public class RicettaServiceImpl implements RicettaService{
 
     @Autowired
@@ -121,7 +123,7 @@ public class RicettaServiceImpl implements RicettaService{
     public void revokeTransferRicetta(String token) {
         TransferRequest req = transferRequestRepository.findByToken(token);
         if(!req.getStatus().equals(TransferRequestStatusEnum.ACTIVE.getValue()))
-            throw new ForbiddenActionException("Forbidden Action");
+            throw new ForbiddenActionException("Forbidden Action for: "+token);
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         if(!email.equals(req.getMittente()))
             throw new ForbiddenActionException("Forbidden Action for: "+email);

@@ -14,7 +14,6 @@ import it.sysman.chefbook.repository.TransferRequestRepository;
 import it.sysman.chefbook.service.RicettaServiceImpl;
 import it.sysman.chefbook.utils.RicettaMapper;
 import it.sysman.chefbook.utils.TransferRequestStatusEnum;
-import it.sysman.chefbook.utils.TransferTokenGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -152,6 +151,150 @@ public class RicettaServiceTest {
             verify(autoreRepository).findByEmail(email);
             assertEquals("Forbidden Action for: " + email, exception.getMessage());
         }
+
+        @Test
+        public void acceptTransferRicettaFail(){
+            String token = "test-token";
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario(email)
+                    .status(TransferRequestStatusEnum.USED.getValue())
+                    .build();
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+            ForbiddenActionException exception = assertThrows(ForbiddenActionException.class, () -> {
+                ricettaService.acceptRicetta(token);
+            });
+            verify(transferRequestRepository).findByToken(token);
+            assertEquals("Forbidden Action for: " + token, exception.getMessage());
+        }
+
+        @Test
+        public void declineTransferRicettaFail(){
+            String token = "test-token";
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario(email)
+                    .status(TransferRequestStatusEnum.USED.getValue())
+                    .build();
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+            ForbiddenActionException exception = assertThrows(ForbiddenActionException.class, () -> {
+                ricettaService.declineRicetta(token);
+            });
+            verify(transferRequestRepository).findByToken(token);
+            assertEquals("Forbidden Action for: " + token, exception.getMessage());
+        }
+
+        @Test
+        public void revokeTransferRicettaFail(){
+            String token = "test-token";
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario(email)
+                    .status(TransferRequestStatusEnum.USED.getValue())
+                    .build();
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+            ForbiddenActionException exception = assertThrows(ForbiddenActionException.class, () -> {
+                ricettaService.revokeTransferRicetta(token);
+            });
+            verify(transferRequestRepository).findByToken(token);
+            assertEquals("Forbidden Action for: " + token, exception.getMessage());
+        }
+
+        @Test
+        public void acceptTransferRicettaFailDestinatario(){
+            String token = "test-token";
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario("test@example.com")
+                    .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                    .build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+
+            ForbiddenActionException exception = assertThrows(ForbiddenActionException.class, () -> {
+                ricettaService.acceptRicetta(token);
+            });
+            verify(transferRequestRepository).findByToken(token);
+            verify(securityContext).getAuthentication();
+            verify(authentication).getName();
+            assertEquals("Forbidden Action for: " + email, exception.getMessage());
+        }
+
+        @Test
+        public void declineTransferRicettaFailDestinatario(){
+            String token = "test-token";
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario("test@example.com")
+                    .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                    .build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+
+            ForbiddenActionException exception = assertThrows(ForbiddenActionException.class, () -> {
+                ricettaService.declineRicetta(token);
+            });
+            verify(transferRequestRepository).findByToken(token);
+            verify(securityContext).getAuthentication();
+            verify(authentication).getName();
+            assertEquals("Forbidden Action for: " + email, exception.getMessage());
+        }
+
+        @Test
+        public void revokeTransferRicettaFailDestinatario(){
+            String token = "test-token";
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario("test@example.com")
+                    .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                    .build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+
+            ForbiddenActionException exception = assertThrows(ForbiddenActionException.class, () -> {
+                ricettaService.revokeTransferRicetta(token);
+            });
+            verify(transferRequestRepository).findByToken(token);
+            verify(securityContext).getAuthentication();
+            verify(authentication).getName();
+            assertEquals("Forbidden Action for: " + email, exception.getMessage());
+        }
     }
 
     @Nested
@@ -272,6 +415,88 @@ public class RicettaServiceTest {
             verify(securityContext).getAuthentication();
             verify(authentication).getName();
             verify(autoreRepository).findByEmail(email);
+        }
+
+        @Test
+        public void acceptRicettaTest() {
+            String token = "test-token";
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario(email)
+                    .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                    .build();
+            Autore destinatario = Autore.builder().email(email).build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+            when(autoreRepository.findByEmail(email)).thenReturn(destinatario);
+
+            ricettaService.acceptRicetta(token);
+
+            assertEquals(TransferRequestStatusEnum.USED.getValue(), request.getStatus());
+            assertEquals(destinatario, ricetta.getAutore());
+            verify(ricettaRepository).save(ricetta);
+            verify(transferRequestRepository).save(request);
+        }
+
+        @Test
+        public void declineRicettaTest() {
+            String token = "test-token";
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario(email)
+                    .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                    .build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+
+            ricettaService.declineRicetta(token);
+
+            assertEquals(TransferRequestStatusEnum.DECLINED.getValue(), request.getStatus());
+            verify(transferRequestRepository).save(request);
+        }
+
+        @Test
+        public void revokeRicettaTest() {
+            String token = "test-token";
+            String email = "mittente@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(new Autore()).build();
+            TransferRequest request = TransferRequest.builder()
+                    .token(token)
+                    .ricetta(ricetta)
+                    .mittente("mittente@example.com")
+                    .destinatario(email)
+                    .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                    .build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+            when(transferRequestRepository.findByToken(token)).thenReturn(request);
+
+            ricettaService.revokeTransferRicetta(token);
+
+            assertEquals(TransferRequestStatusEnum.REVOKED.getValue(), request.getStatus());
+            verify(transferRequestRepository).save(request);
         }
     }
 }

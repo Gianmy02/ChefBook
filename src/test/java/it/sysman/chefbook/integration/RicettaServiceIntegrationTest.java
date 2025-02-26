@@ -2,11 +2,18 @@ package it.sysman.chefbook.integration;
 
 import it.sysman.chefbook.dto.AutoreDto;
 import it.sysman.chefbook.dto.RicettaDto;
+import it.sysman.chefbook.dto.TransferRequestDto;
 import it.sysman.chefbook.entity.Autore;
+import it.sysman.chefbook.entity.Ricetta;
+import it.sysman.chefbook.entity.TransferRequest;
+import it.sysman.chefbook.repository.TransferRequestRepository;
 import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.service.AutoreService;
 import it.sysman.chefbook.service.RicettaService;
 import it.sysman.chefbook.utils.AutoreMapper;
+import it.sysman.chefbook.utils.RicettaMapper;
+import it.sysman.chefbook.utils.TransferRequestStatusEnum;
+import jakarta.persistence.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,6 +28,9 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class RicettaServiceIntegrationTest {
@@ -58,6 +68,12 @@ public class RicettaServiceIntegrationTest {
 
     @Autowired
     private AutoreMapper autoreMapper;
+
+    @Autowired
+    private TransferRequestRepository transferRequestRepository;
+
+    @Autowired
+    private RicettaMapper ricettaMapper;
 
     @Test
     void testSaveAndRetrieveRicetta() {
@@ -147,5 +163,144 @@ public class RicettaServiceIntegrationTest {
         int id = -1;
         boolean result = ricettaService.removeRicetta(id);
         assertThat(result).isFalse();
+    }
+
+    @Test
+    void testCreateTransferRicetta(){
+        String email = "test@example.com";
+        AutoreDto a = new AutoreDto();
+        a.setEmail(email);
+        a.setPassword("password");
+        autoreService.addAutore(a);
+        Autore autore = autoreMapper.autoreDtoToAutore(autoreService.getAutoreByEmail(email));
+        RicettaDto r = new RicettaDto();
+        r.setAutoreId(autore.getId());
+        r.setNome("test");
+
+        //email di autentication da verificare
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authentication.getName()).thenReturn(email);
+
+        // Creiamo un mock del SecurityContext
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        // Impostiamo il mock nel SecurityContextHolder
+        SecurityContextHolder.setContext(securityContext);
+
+        ricettaService.addRicetta(r);
+
+        RicettaDto rdto = ricettaService.getRicettaByName("test");
+        TransferRequestDto tdto = TransferRequestDto
+                .builder()
+                .idRicetta(rdto.getId())
+                .emailDestinatario(email)
+                .build();
+
+        ricettaService.transferRicetta(tdto);
+        TransferRequest request = transferRequestRepository.findByRicettaId(ricettaMapper.ricettaDtoToRicetta(rdto).getId());
+        assertThat(request.getRicetta().getId()).isEqualTo(ricettaMapper.ricettaDtoToRicetta(rdto).getId());
+    }
+
+    @Test
+    void testAcceptTransferRicetta(){
+        String token = "test-token";
+        String email = "destinatario@example.com";
+        Autore mittente = Autore.builder()
+                .id(1)
+                .email("mittente@example.com")
+                .build();
+        Ricetta ricetta = Ricetta.builder().id(1).autore(mittente).nome("test").build();
+        TransferRequest request = TransferRequest.builder()
+                .ricetta(ricetta)
+                .mittente("mittente@example.com")
+                .destinatario(email)
+                .token(token)
+                .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                .build();
+        AutoreDto destinatario = AutoreDto.builder().id(2).email(email).password("password").build();
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn(email);
+        autoreService.addAutore(destinatario);
+        ricettaService.addRicetta(ricettaMapper.ricettaToRicettaDto(ricetta));
+        transferRequestRepository.save(request);
+        ricettaService.acceptRicetta(token);
+
+        TransferRequest result = transferRequestRepository.findByToken(token);
+
+        assertEquals(TransferRequestStatusEnum.USED.getValue(), result.getStatus());
+        //assertThat(result.getRicetta().getAutore().getId()).isEqualTo(destinatario.getId());
+    }
+
+    @Test
+    void testDeclineTransferRicetta(){
+        String token = "test-token";
+        String email = "destinatario@example.com";
+        Autore mittente = Autore.builder()
+                .id(1)
+                .email("mittente@example.com")
+                .build();
+        Ricetta ricetta = Ricetta.builder().id(1).autore(mittente).nome("test").build();
+        TransferRequest request = TransferRequest.builder()
+                .ricetta(ricetta)
+                .mittente("mittente@example.com")
+                .destinatario(email)
+                .token(token)
+                .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                .build();
+        AutoreDto destinatario = AutoreDto.builder().id(2).email(email).password("password").build();
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn(email);
+        autoreService.addAutore(destinatario);
+        ricettaService.addRicetta(ricettaMapper.ricettaToRicettaDto(ricetta));
+        transferRequestRepository.save(request);
+        ricettaService.declineRicetta(token);
+
+        TransferRequest result = transferRequestRepository.findByToken(token);
+
+        assertEquals(TransferRequestStatusEnum.DECLINED.getValue(), result.getStatus());
+        assertThat(result.getRicetta().getAutore().getId()).isEqualTo(mittente.getId());
+    }
+
+    @Test
+    void testRevokeTransferRicetta(){
+        String token = "test-token";
+        String email = "destinatario@example.com";
+        Autore mittente = Autore.builder()
+                .id(1)
+                .email("mittente@example.com")
+                .build();
+        Ricetta ricetta = Ricetta.builder().id(1).autore(mittente).nome("test").build();
+        TransferRequest request = TransferRequest.builder()
+                .ricetta(ricetta)
+                .mittente(email)
+                .destinatario(email)
+                .token(token)
+                .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                .build();
+        AutoreDto destinatario = AutoreDto.builder().id(2).email(email).password("password").build();
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn(email);
+        autoreService.addAutore(destinatario);
+        ricettaService.addRicetta(ricettaMapper.ricettaToRicettaDto(ricetta));
+        transferRequestRepository.save(request);
+        ricettaService.revokeTransferRicetta(token);
+
+        TransferRequest result = transferRequestRepository.findByToken(token);
+
+        assertEquals(TransferRequestStatusEnum.REVOKED.getValue(), result.getStatus());
+        //assertThat(result.getRicetta().getAutore().getId()).isEqualTo(mittente.getId());
     }
 }
