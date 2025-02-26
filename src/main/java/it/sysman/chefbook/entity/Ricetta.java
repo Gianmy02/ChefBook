@@ -3,6 +3,8 @@ package it.sysman.chefbook.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table
 @Getter
@@ -21,5 +23,6 @@ public class Ricetta {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "autore")
     private Autore autore;
-
+    @OneToMany(mappedBy = "ricetta")
+    private List<TransferRequest> transferRequest;
 }

@@ -1,14 +1,20 @@
 package it.sysman.chefbook;
 
 import it.sysman.chefbook.dto.RicettaDto;
+import it.sysman.chefbook.dto.TransferRequestDto;
 import it.sysman.chefbook.entity.Autore;
 import it.sysman.chefbook.entity.Ricetta;
+import it.sysman.chefbook.entity.TransferRequest;
 import it.sysman.chefbook.exception.AutoreNotFoundException;
+import it.sysman.chefbook.exception.ForbiddenActionException;
 import it.sysman.chefbook.exception.RicettaNotFoundException;
 import it.sysman.chefbook.repository.AutoreRepository;
 import it.sysman.chefbook.repository.RicettaRepository;
+import it.sysman.chefbook.repository.TransferRequestRepository;
 import it.sysman.chefbook.service.RicettaServiceImpl;
 import it.sysman.chefbook.utils.RicettaMapper;
+import it.sysman.chefbook.utils.TransferRequestStatusEnum;
+import it.sysman.chefbook.utils.TransferTokenGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,6 +45,9 @@ public class RicettaServiceTest {
 
     @Mock
     private AutoreRepository autoreRepository;
+
+    @Mock
+    private TransferRequestRepository transferRequestRepository;
 
     @Nested
     class Incorrect{
@@ -90,6 +100,57 @@ public class RicettaServiceTest {
 
             assertFalse(result);
             verify(ricettaMapper).ricettaDtoToRicetta(dto);
+        }
+
+        @Test
+        public void createTransferRicettaFailDestinatario(){
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(Autore.builder().email("test@example.com").build()).build();
+            TransferRequestDto tdto = TransferRequestDto.builder()
+                    .idRicetta(1)
+                    .emailDestinatario(email)
+                    .build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+            when(ricettaRepository.findById(1)).thenReturn(Optional.of(ricetta));
+
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+            AutoreNotFoundException exception = assertThrows(AutoreNotFoundException.class, () -> {
+                ricettaService.transferRicetta(tdto);
+            });
+            verify(securityContext).getAuthentication();
+            verify(authentication).getName();
+            assertEquals("Autore: " + email, exception.getMessage());
+        }
+
+        @Test
+        public void createTransferRicettaFail(){
+            String email = "destinatario@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(Autore.builder().email("test@example.com").build()).build();
+            TransferRequestDto tdto = TransferRequestDto.builder()
+                    .idRicetta(1)
+                    .emailDestinatario(email)
+                    .build();
+            Autore autore = Autore.builder().email(email).build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+
+            when(ricettaRepository.findById(1)).thenReturn(Optional.of(ricetta));
+            when(autoreRepository.findByEmail(tdto.getEmailDestinatario())).thenReturn(autore);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+
+            ForbiddenActionException exception = assertThrows(ForbiddenActionException.class, () -> {
+                ricettaService.transferRicetta(tdto);
+            });
+
+            verify(securityContext).getAuthentication();
+            verify(authentication).getName();
+            verify(autoreRepository).findByEmail(email);
+            assertEquals("Forbidden Action for: " + email, exception.getMessage());
         }
     }
 
@@ -184,6 +245,33 @@ public class RicettaServiceTest {
             boolean result = ricettaService.removeRicetta(ricetta.getId());
 
             assertTrue(result);
+        }
+
+        @Test
+        public void createTransferRicettaTest(){
+            String email = "mittente@example.com";
+            Ricetta ricetta = Ricetta.builder().id(1).autore(Autore.builder().email(email).build()).build();
+            TransferRequestDto tdto = TransferRequestDto.builder()
+                    .idRicetta(1)
+                    .emailDestinatario(email)
+                    .build();
+            Autore autore = Autore.builder().email(email).build();
+            Authentication authentication = mock(Authentication.class);
+            SecurityContext securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(email);
+
+            when(authentication.getName()).thenReturn(email);
+            when(ricettaRepository.findById(1)).thenReturn(Optional.of(ricetta));
+            when(autoreRepository.findByEmail(tdto.getEmailDestinatario())).thenReturn(autore);
+
+            ricettaService.transferRicetta(tdto);
+
+            verify(securityContext).getAuthentication();
+            verify(authentication).getName();
+            verify(autoreRepository).findByEmail(email);
         }
     }
 }

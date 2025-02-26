@@ -1,10 +1,7 @@
 package it.sysman.chefbook.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @Table
@@ -13,15 +10,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Autore {
+public class TransferRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique=true)
-    private String email;
-    private String nome;
-    private String cognome;
-    private String sesso;
-    @OneToMany(mappedBy = "autore")
-    private List<Ricetta> ricette;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ricetta")
+    private Ricetta ricetta;
+    private String mittente;
+    private String destinatario;
+    private String token;
+    private String status;
 }

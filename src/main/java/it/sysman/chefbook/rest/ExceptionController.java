@@ -1,6 +1,7 @@
 package it.sysman.chefbook.rest;
 
 import it.sysman.chefbook.exception.AutoreNotFoundException;
+import it.sysman.chefbook.exception.ForbiddenActionException;
 import it.sysman.chefbook.exception.RicettaNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,5 +16,11 @@ public class ExceptionController {
     public ResponseEntity<String> handleNotFoundException(RuntimeException e){
         log.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler({ForbiddenActionException.class})
+    public ResponseEntity<String> handleForbiddenException(RuntimeException e){
+        log.error(e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 }

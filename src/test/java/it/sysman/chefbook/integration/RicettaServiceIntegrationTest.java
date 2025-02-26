@@ -3,7 +3,6 @@ package it.sysman.chefbook.integration;
 import it.sysman.chefbook.dto.AutoreDto;
 import it.sysman.chefbook.dto.RicettaDto;
 import it.sysman.chefbook.entity.Autore;
-import it.sysman.chefbook.exception.RicettaNotFoundException;
 import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.service.AutoreService;
 import it.sysman.chefbook.service.RicettaService;
@@ -22,9 +21,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 public class RicettaServiceIntegrationTest {

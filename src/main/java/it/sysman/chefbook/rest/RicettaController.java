@@ -3,6 +3,8 @@ package it.sysman.chefbook.rest;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.sysman.chefbook.dto.RicettaDto;
+import it.sysman.chefbook.dto.TransferRequestDto;
+import it.sysman.chefbook.entity.TransferRequest;
 import it.sysman.chefbook.service.RicettaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,22 @@ public class RicettaController {
                 ResponseEntity.status(HttpStatus.OK).body(null) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
+
+    @PostMapping("transfer")
+    public void transferRicetta(@RequestBody TransferRequestDto dto){
+        ricettaService.transferRicetta(dto);
+    }
+
+    @GetMapping("accept")
+    public void acceptRicetta(@RequestParam String id) {
+        ricettaService.acceptRicetta(id);
+    }
+
+    @GetMapping("decline")
+    public void declineRicetta(@RequestParam String id) { ricettaService.declineRicetta(id); }
+
+    @GetMapping("revoke")
+    public void revokeRicetta(@RequestParam String id) { ricettaService.revokeTransferRicetta(id);}
 
     @GetMapping("nome")
     public RicettaDto getRicettaByName(@RequestParam String value){

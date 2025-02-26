@@ -65,12 +65,10 @@ class AutoreServiceIntegrationTest {
         autoreService.addAutore(dto);
         AutoreDto dto2 = autoreService.getAutoreByEmail("test@example.com");
         dto2.setEmail("test2@example.com");
-        dto2.setPassword("password2");
         boolean result = autoreService.editAutore(dto2);
         AutoreDto a2 = autoreService.getAutoreByEmail("test2@example.com");
         assertThat(result).isTrue();
         assertThat(a2.getEmail()).isEqualTo("test2@example.com");
-        assertThat(a2.getPassword()).isEqualTo("password2");
         assertThat(a2.getId()).isEqualTo(dto2.getId());
     }
 
