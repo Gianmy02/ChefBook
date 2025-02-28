@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -203,6 +204,7 @@ public class RicettaServiceIntegrationTest {
     }
 
     @Test
+    @Transactional
     void testAcceptTransferRicetta(){
         String token = "test-token";
         String email = "destinatario@example.com";
@@ -233,10 +235,11 @@ public class RicettaServiceIntegrationTest {
         TransferRequest result = transferRequestRepository.findByToken(token);
 
         assertEquals(TransferRequestStatusEnum.USED.getValue(), result.getStatus());
-        //assertThat(result.getRicetta().getAutore().getId()).isEqualTo(destinatario.getId());
+        assertThat(result.getRicetta().getAutore().getId()).isEqualTo(destinatario.getId());
     }
 
     @Test
+    @Transactional
     void testDeclineTransferRicetta(){
         String token = "test-token";
         String email = "destinatario@example.com";
@@ -271,6 +274,7 @@ public class RicettaServiceIntegrationTest {
     }
 
     @Test
+    @Transactional
     void testRevokeTransferRicetta(){
         String token = "test-token";
         String email = "destinatario@example.com";
@@ -301,6 +305,6 @@ public class RicettaServiceIntegrationTest {
         TransferRequest result = transferRequestRepository.findByToken(token);
 
         assertEquals(TransferRequestStatusEnum.REVOKED.getValue(), result.getStatus());
-        //assertThat(result.getRicetta().getAutore().getId()).isEqualTo(mittente.getId());
+        assertThat(result.getRicetta().getAutore().getId()).isEqualTo(mittente.getId());
     }
 }
