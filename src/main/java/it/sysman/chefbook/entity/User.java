@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "app_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +20,7 @@ public class User {
     private String username;
     private String password;
     @ManyToOne
-    @JoinColumn(name = "role")
+    @JoinColumn(name = "\"role\"")
     private Role role;
 }
 

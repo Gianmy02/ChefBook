@@ -16,6 +16,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "\"value\"")
     private String value;
     @OneToMany(mappedBy = "role", orphanRemoval = true)
     List<User> users;

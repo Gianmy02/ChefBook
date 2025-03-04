@@ -1,4 +1,4 @@
-package it.sysman.chefbook;
+package it.sysman.chefbook.unit;
 
 import it.sysman.chefbook.dto.AutoreDto;
 import it.sysman.chefbook.entity.Autore;

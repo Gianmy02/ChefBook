@@ -1,4 +1,4 @@
-package it.sysman.chefbook;
+package it.sysman.chefbook.unit;
 
 import it.sysman.chefbook.entity.Role;
 import it.sysman.chefbook.repository.RoleRepository;

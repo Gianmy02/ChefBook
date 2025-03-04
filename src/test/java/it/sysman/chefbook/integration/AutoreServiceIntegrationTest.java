@@ -16,28 +16,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class AutoreServiceIntegrationTest {
-
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0")
-            .withDatabaseName("cb")
-            .withUsername("chefbook")
-            .withPassword("chefbook");
-
-    @BeforeAll
-    static void startContainer() {
-        mySQLContainer.start();
-    }
-
-    @AfterAll
-    static void stopContainer() {
-        mySQLContainer.stop();
-    }
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", mySQLContainer::getUsername);
-        registry.add("spring.datasource.password", mySQLContainer::getPassword);
-    }
+//
+//    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0")
+//            .withDatabaseName("cb")
+//            .withUsername("chefbook")
+//            .withPassword("chefbook");
+//
+//    @BeforeAll
+//    static void startContainer() {
+//        mySQLContainer.start();
+//    }
+//
+//    @AfterAll
+//    static void stopContainer() {
+//        mySQLContainer.stop();
+//    }
+//
+//    @DynamicPropertySource
+//    static void configureProperties(DynamicPropertyRegistry registry) {
+//        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+//        registry.add("spring.datasource.username", mySQLContainer::getUsername);
+//        registry.add("spring.datasource.password", mySQLContainer::getPassword);
+//    }
 
     @Autowired
     private UserRepository userRepository;
