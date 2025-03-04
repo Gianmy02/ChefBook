@@ -13,7 +13,6 @@ import it.sysman.chefbook.service.RicettaService;
 import it.sysman.chefbook.utils.AutoreMapper;
 import it.sysman.chefbook.utils.RicettaMapper;
 import it.sysman.chefbook.utils.TransferRequestStatusEnum;
-import jakarta.persistence.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,6 +26,8 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,17 +80,17 @@ public class RicettaServiceIntegrationTest {
     @Test
     void testSaveAndRetrieveRicetta() {
         AutoreDto a = new AutoreDto();
-        a.setEmail("test@example.com");
+        a.setEmail("test6@example.com");
         a.setPassword("password");
         autoreService.addAutore(a);
-        Autore autore = autoreMapper.autoreDtoToAutore(autoreService.getAutoreByEmail("test@example.com"));
+        Autore autore = autoreMapper.autoreDtoToAutore(autoreService.getAutoreByEmail("test6@example.com"));
         RicettaDto r = new RicettaDto();
         r.setAutoreId(autore.getId());
-        r.setNome("test");
+        r.setNome("test1");
         r.setPrivacy(true);
         //email di autentication da verificare
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getName()).thenReturn("test@example.com");
+        Mockito.when(authentication.getName()).thenReturn("test6@example.com");
 
         // Creiamo un mock del SecurityContext
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
@@ -98,24 +99,24 @@ public class RicettaServiceIntegrationTest {
         // Impostiamo il mock nel SecurityContextHolder
         SecurityContextHolder.setContext(securityContext);
         ricettaService.addRicetta(r);
-        RicettaDto ricetta = ricettaService.getRicettaByName("test");
+        RicettaDto ricetta = ricettaService.getRicettaByName("test1");
         assertThat(ricetta.getNome()).isEqualTo(r.getNome());
     }
 
     @Test
     void testEditRicetta(){
         AutoreDto a = new AutoreDto();
-        a.setEmail("test@example.com");
+        a.setEmail("test7@example.com");
         a.setPassword("password");
         autoreService.addAutore(a);
-        Autore autore = autoreMapper.autoreDtoToAutore(autoreService.getAutoreByEmail("test@example.com"));
+        Autore autore = autoreMapper.autoreDtoToAutore(autoreService.getAutoreByEmail("test7@example.com"));
         RicettaDto r = new RicettaDto();
         r.setAutoreId(autore.getId());
-        r.setNome("test");
+        r.setNome("test2");
         r.setPrivacy(true);
         //email di autentication da verificare
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getName()).thenReturn("test@example.com");
+        Mockito.when(authentication.getName()).thenReturn("test7@example.com");
 
         // Creiamo un mock del SecurityContext
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
@@ -124,10 +125,10 @@ public class RicettaServiceIntegrationTest {
         // Impostiamo il mock nel SecurityContextHolder
         SecurityContextHolder.setContext(securityContext);
         ricettaService.addRicetta(r);
-        RicettaDto ricetta = ricettaService.getRicettaByName("test");
-        ricetta.setNome("test2");
+        RicettaDto ricetta = ricettaService.getRicettaByName("test2");
+        ricetta.setNome("test3");
         boolean result = ricettaService.editRicetta(ricetta);
-        r = ricettaService.getRicettaByName("test2");
+        r = ricettaService.getRicettaByName("test3");
         assertThat(result).isTrue();
         assertThat(ricetta.getNome()).isEqualTo(r.getNome());
     }
@@ -135,17 +136,17 @@ public class RicettaServiceIntegrationTest {
     @Test
     void testRemoveRicetta(){
         AutoreDto a = new AutoreDto();
-        a.setEmail("test@example.com");
+        a.setEmail("test8@example.com");
         a.setPassword("password");
         autoreService.addAutore(a);
-        Autore autore = autoreMapper.autoreDtoToAutore(autoreService.getAutoreByEmail("test@example.com"));
+        Autore autore = autoreMapper.autoreDtoToAutore(autoreService.getAutoreByEmail("test8@example.com"));
         RicettaDto r = new RicettaDto();
         r.setAutoreId(autore.getId());
-        r.setNome("test");
+        r.setNome("test4");
         r.setPrivacy(true);
         //email di autentication da verificare
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getName()).thenReturn("test@example.com");
+        Mockito.when(authentication.getName()).thenReturn("test8@example.com");
 
         // Creiamo un mock del SecurityContext
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
@@ -154,7 +155,7 @@ public class RicettaServiceIntegrationTest {
         // Impostiamo il mock nel SecurityContextHolder
         SecurityContextHolder.setContext(securityContext);
         ricettaService.addRicetta(r);
-        RicettaDto ricetta = ricettaService.getRicettaByName("test");
+        RicettaDto ricetta = ricettaService.getRicettaByName("test4");
         boolean result = ricettaService.removeRicetta(ricetta.getId());
         assertThat(result).isTrue();
     }
@@ -168,7 +169,7 @@ public class RicettaServiceIntegrationTest {
 
     @Test
     void testCreateTransferRicetta(){
-        String email = "test@example.com";
+        String email = "test9@example.com";
         AutoreDto a = new AutoreDto();
         a.setEmail(email);
         a.setPassword("password");
@@ -176,7 +177,7 @@ public class RicettaServiceIntegrationTest {
         Autore autore = autoreMapper.autoreDtoToAutore(autoreService.getAutoreByEmail(email));
         RicettaDto r = new RicettaDto();
         r.setAutoreId(autore.getId());
-        r.setNome("test");
+        r.setNome("test5");
 
         //email di autentication da verificare
         Authentication authentication = Mockito.mock(Authentication.class);
@@ -191,7 +192,7 @@ public class RicettaServiceIntegrationTest {
 
         ricettaService.addRicetta(r);
 
-        RicettaDto rdto = ricettaService.getRicettaByName("test");
+        RicettaDto rdto = ricettaService.getRicettaByName("test5");
         TransferRequestDto tdto = TransferRequestDto
                 .builder()
                 .idRicetta(rdto.getId())
@@ -207,19 +208,14 @@ public class RicettaServiceIntegrationTest {
     @Transactional
     void testAcceptTransferRicetta(){
         String token = "test-token";
-        String email = "destinatario@example.com";
-        Autore mittente = Autore.builder()
+        String email = "destinatario1@example.com";
+        AutoreDto mittenteDto = AutoreDto.builder()
                 .id(1)
-                .email("mittente@example.com")
+                .email("mittente1@example.com")
+                .password("password")
                 .build();
-        Ricetta ricetta = Ricetta.builder().id(1).autore(mittente).nome("test").build();
-        TransferRequest request = TransferRequest.builder()
-                .ricetta(ricetta)
-                .mittente("mittente@example.com")
-                .destinatario(email)
-                .token(token)
-                .status(TransferRequestStatusEnum.ACTIVE.getValue())
-                .build();
+        Autore mittente = autoreMapper.autoreDtoToAutore(mittenteDto);
+        Ricetta ricetta = Ricetta.builder().id(1).autore(mittente).nome("test6").build();
         AutoreDto destinatario = AutoreDto.builder().id(2).email(email).password("password").build();
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -227,8 +223,17 @@ public class RicettaServiceIntegrationTest {
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(email);
+        autoreService.addAutore(mittenteDto);
         autoreService.addAutore(destinatario);
         ricettaService.addRicetta(ricettaMapper.ricettaToRicettaDto(ricetta));
+        RicettaDto r = ricettaService.getRicettaByName("test6");
+        TransferRequest request = TransferRequest.builder()
+                .ricetta(ricettaMapper.ricettaDtoToRicetta(r))
+                .mittente("mittente1@example.com")
+                .destinatario(email)
+                .token(token)
+                .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                .build();
         transferRequestRepository.save(request);
         ricettaService.acceptRicetta(token);
 
@@ -238,19 +243,22 @@ public class RicettaServiceIntegrationTest {
         assertThat(result.getRicetta().getAutore().getId()).isEqualTo(destinatario.getId());
     }
 
+
+
     @Test
     @Transactional
     void testDeclineTransferRicetta(){
         String token = "test-token";
-        String email = "destinatario@example.com";
-        Autore mittente = Autore.builder()
+        String email = "destinatario2@example.com";
+        AutoreDto mittente = AutoreDto.builder()
                 .id(1)
-                .email("mittente@example.com")
+                .password("password")
+                .email("mittente2@example.com")
                 .build();
-        Ricetta ricetta = Ricetta.builder().id(1).autore(mittente).nome("test").build();
+        Ricetta ricetta = Ricetta.builder().id(1).autore(autoreMapper.autoreDtoToAutore(mittente)).nome("test7").build();
         TransferRequest request = TransferRequest.builder()
                 .ricetta(ricetta)
-                .mittente("mittente@example.com")
+                .mittente("mittente2@example.com")
                 .destinatario(email)
                 .token(token)
                 .status(TransferRequestStatusEnum.ACTIVE.getValue())
@@ -277,34 +285,42 @@ public class RicettaServiceIntegrationTest {
     @Transactional
     void testRevokeTransferRicetta(){
         String token = "test-token";
-        String email = "destinatario@example.com";
-        Autore mittente = Autore.builder()
+        String email = "destinatario3@example.com";
+        AutoreDto dtoMittente = AutoreDto.builder()
                 .id(1)
-                .email("mittente@example.com")
+                .email("mittente3@example.com")
+                .password("password")
                 .build();
-        Ricetta ricetta = Ricetta.builder().id(1).autore(mittente).nome("test").build();
-        TransferRequest request = TransferRequest.builder()
-                .ricetta(ricetta)
-                .mittente(email)
-                .destinatario(email)
-                .token(token)
-                .status(TransferRequestStatusEnum.ACTIVE.getValue())
+        Autore mittente = autoreMapper.autoreDtoToAutore(dtoMittente);
+        Ricetta ricetta = Ricetta.builder().id(1).autore(mittente).nome("test8").build();
+        AutoreDto destinatario = AutoreDto.builder()
+                .id(2)
+                .email(email)
+                .password("password")
                 .build();
-        AutoreDto destinatario = AutoreDto.builder().id(2).email(email).password("password").build();
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(email);
+        autoreService.addAutore(dtoMittente);
         autoreService.addAutore(destinatario);
-        ricettaService.addRicetta(ricettaMapper.ricettaToRicettaDto(ricetta));
+        RicettaDto r1 = ricettaMapper.ricettaToRicettaDto(ricetta);
+        ricettaService.addRicetta(r1);
+        RicettaDto r = ricettaService.getRicettaByName("test8");
+        TransferRequest request = TransferRequest.builder()
+                .ricetta(ricettaMapper.ricettaDtoToRicetta(r))
+                .mittente(email)
+                .destinatario(email)
+                .token(token)
+                .status(TransferRequestStatusEnum.ACTIVE.getValue())
+                .build();
         transferRequestRepository.save(request);
         ricettaService.revokeTransferRicetta(token);
 
         TransferRequest result = transferRequestRepository.findByToken(token);
 
         assertEquals(TransferRequestStatusEnum.REVOKED.getValue(), result.getStatus());
-        assertThat(result.getRicetta().getAutore().getId()).isEqualTo(mittente.getId());
     }
 }

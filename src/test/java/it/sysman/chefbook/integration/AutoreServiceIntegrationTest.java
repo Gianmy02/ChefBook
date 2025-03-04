@@ -32,7 +32,6 @@ class AutoreServiceIntegrationTest {
         mySQLContainer.stop();
     }
 
-    // Configura il datasource dinamicamente
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
@@ -60,15 +59,15 @@ class AutoreServiceIntegrationTest {
     @Test
     void testEditAndRetrieveUser() {
         AutoreDto dto = new AutoreDto();
-        dto.setEmail("test@example.com");
+        dto.setEmail("test2@example.com");
         dto.setPassword("password");
         autoreService.addAutore(dto);
-        AutoreDto dto2 = autoreService.getAutoreByEmail("test@example.com");
-        dto2.setEmail("test2@example.com");
+        AutoreDto dto2 = autoreService.getAutoreByEmail("test2@example.com");
+        dto2.setEmail("test3@example.com");
         boolean result = autoreService.editAutore(dto2);
-        AutoreDto a2 = autoreService.getAutoreByEmail("test2@example.com");
+        AutoreDto a2 = autoreService.getAutoreByEmail("test3@example.com");
         assertThat(result).isTrue();
-        assertThat(a2.getEmail()).isEqualTo("test2@example.com");
+        assertThat(a2.getEmail()).isEqualTo("test3@example.com");
         assertThat(a2.getId()).isEqualTo(dto2.getId());
     }
 
@@ -77,10 +76,10 @@ class AutoreServiceIntegrationTest {
     @Test
     void testRemove() {
         AutoreDto dto = new AutoreDto();
-        dto.setEmail("test@example.com");
+        dto.setEmail("test4@example.com");
         dto.setPassword("password");
         autoreService.addAutore(dto);
-        AutoreDto dto2 = autoreService.getAutoreByEmail("test@example.com");
+        AutoreDto dto2 = autoreService.getAutoreByEmail("test4@example.com");
         boolean result = autoreService.removeAutore(dto2.getId());
         assertThat(result).isTrue();
     }
