@@ -7,14 +7,11 @@ import it.sysman.chefbook.entity.Autore;
 import it.sysman.chefbook.entity.Ricetta;
 import it.sysman.chefbook.entity.TransferRequest;
 import it.sysman.chefbook.repository.TransferRequestRepository;
-import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.service.AutoreService;
 import it.sysman.chefbook.service.RicettaService;
 import it.sysman.chefbook.utils.AutoreMapper;
 import it.sysman.chefbook.utils.RicettaMapper;
 import it.sysman.chefbook.utils.TransferRequestStatusEnum;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MySQLContainer;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,31 +28,6 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class RicettaServiceIntegrationTest {
-//    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0")
-//            .withDatabaseName("cb")
-//            .withUsername("chefbook")
-//            .withPassword("chefbook");
-//
-//    @BeforeAll
-//    static void startContainer() {
-//        mySQLContainer.start();
-//    }
-//
-//    @AfterAll
-//    static void stopContainer() {
-//        mySQLContainer.stop();
-//    }
-//
-//    // Configura il datasource dinamicamente
-//    @DynamicPropertySource
-//    static void configureProperties(DynamicPropertyRegistry registry) {
-//        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
-//        registry.add("spring.datasource.username", mySQLContainer::getUsername);
-//        registry.add("spring.datasource.password", mySQLContainer::getPassword);
-//    }
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private RicettaService ricettaService;
