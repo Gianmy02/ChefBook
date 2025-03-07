@@ -1,6 +1,7 @@
 package it.sysman.chefbook.config;
 
 import it.sysman.chefbook.service.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,13 +13,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ProviderImpl implements AuthenticationProvider {
 
-    @Autowired
-    UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();

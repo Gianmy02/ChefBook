@@ -4,7 +4,6 @@ package it.sysman.chefbook.service;
 import it.sysman.chefbook.dto.RicettaDto;
 import it.sysman.chefbook.dto.TransferRequestDto;
 
-
 import java.util.List;
 
 public interface RicettaService {

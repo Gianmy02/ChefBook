@@ -15,6 +15,7 @@ import it.sysman.chefbook.utils.RicettaMapper;
 import it.sysman.chefbook.utils.TransferRequestStatusEnum;
 import it.sysman.chefbook.utils.TransferTokenGenerator;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,19 +25,16 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class RicettaServiceImpl implements RicettaService{
 
-    @Autowired
-    private RicettaRepository ricettaRepository;
+    private final RicettaRepository ricettaRepository;
 
-    @Autowired
-    private TransferRequestRepository transferRequestRepository;
+    private final TransferRequestRepository transferRequestRepository;
 
-    @Autowired
-    private RicettaMapper ricettaMapper;
+    private final RicettaMapper ricettaMapper;
 
-    @Autowired
-    private AutoreRepository autoreRepository;
+    private final AutoreRepository autoreRepository;
 
     public void addRicetta(RicettaDto dto){
         Ricetta r = ricettaMapper.ricettaDtoToRicetta(dto);

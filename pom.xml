@@ -28,6 +28,10 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<!--suppress UnresolvedMavenProperty -->
+		<sonar.token>${env.SONAR_TOKEN}</sonar.token>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -122,7 +126,12 @@
 			<artifactId>mysql</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>com.openpojo</groupId>
+			<artifactId>openpojo</artifactId>
+			<version>0.9.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -138,6 +147,11 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.10.0.2594</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
@@ -158,6 +172,14 @@
 								report
 							</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/dto/**</exclude>
+								<exclude>**/entity/**</exclude>
+								<exclude>**/rest/**</exclude>
+								<exclude>**/filters/**</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

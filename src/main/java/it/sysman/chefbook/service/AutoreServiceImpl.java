@@ -8,6 +8,7 @@ import it.sysman.chefbook.repository.AutoreRepository;
 import it.sysman.chefbook.repository.UserRepository;
 import it.sysman.chefbook.utils.AutoreMapper;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,22 +18,18 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AutoreServiceImpl implements AutoreService{
 
-    @Autowired
-    private AutoreRepository autoreRepository;
+    private final AutoreRepository autoreRepository;
 
-    @Autowired
-    private AutoreMapper autoreMapper;
+    private final AutoreMapper autoreMapper;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public void addAutore(AutoreDto dto) {
         Autore a = autoreMapper.autoreDtoToAutore(dto);
